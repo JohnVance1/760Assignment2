@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Collider))]
 public class FlockAgent : GAgent
@@ -184,12 +185,13 @@ public class FlockAgent : GAgent
         Collider[] agentList = Physics.OverlapSphere(transform.position, 1f);
         foreach (Collider c in agentList)
         {
-            if (c.tag != "SafeSpace")
+            if (c.gameObject.tag != "SafeSpace" && c.gameObject.tag != "Food")
             {
-                if (c != this.AgentCollider && c.gameObject.GetComponent<FlockAgent>().isHungry == false)
+                if (c != this.AgentCollider && c.gameObject.GetComponent<FlockAgent>().IsHungry == false)
                 {
                     return c.gameObject;
                 }
+                
             }
 
         }

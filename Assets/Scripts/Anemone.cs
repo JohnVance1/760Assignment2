@@ -21,8 +21,14 @@ public class Anemone : MonoBehaviour
     void Start()
     {
         GWorld.Instance.AddAnemone(gameObject);
-        //foods = new List<GameObject>();
+        foods = new List<GameObject>();
         fish = new List<GameObject>();
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            AddFood(transform.GetChild(i).gameObject);
+        }
+
     }
 
     private void Update()
@@ -33,7 +39,7 @@ public class Anemone : MonoBehaviour
             if(timer >= timerMax)
             {
                 GameObject food = Instantiate(foodPrefab,
-                                Random.insideUnitSphere / transform.localScale.x,
+                                new Vector3(Random.Range(0f, 0.5f) + transform.position.x, Random.Range(0f, 0.5f) + transform.position.y, Random.Range(0f, 0.5f) + transform.position.z),
                                 Quaternion.identity,
                                 transform);
 

@@ -12,7 +12,7 @@ public class CheckForFood : GAction
         flockAgent = agent.GetComponent<FlockAgent>();
         target = flockAgent.CurrentAnemone;
         a = flockAgent.CurrentAnemone.GetComponent<Anemone>();
-        if (a.FoodCount() > 0)
+        if (a.FoodCount() > 0 && flockAgent.InAnemone)
         {
             a.RemoveFood(a.FoodCount() - 1);
             flockAgent.IsHungry = false;

@@ -27,8 +27,7 @@ public class SearchForAnemone : GAction
 
     public override bool PostPerform()
     {
-        flockAgent.CurrentAnemone = target;
-        flockAgent.InAnemone = true;
+        //flockAgent.CurrentAnemone = target;
         flockAgent.VelAdd = Vector3.zero;
         return true;
     }

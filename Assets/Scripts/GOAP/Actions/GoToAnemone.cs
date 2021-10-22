@@ -9,7 +9,7 @@ public class GoToAnemone : GAction
     public override bool PrePerform()
     {
         flockAgent = agent.GetComponent<FlockAgent>();
-        target = flockAgent.CurrentAnemone;
+        target = GWorld.Instance.CheckClosestAnemone(agent);
 
         if (target == null)
         {
@@ -21,7 +21,7 @@ public class GoToAnemone : GAction
     public override void Tick()
     {
         flockAgent.VelAdd = Seek(agent.transform.position, target.transform.position);
-        if(Vector3.Distance(agent.transform.position, target.transform.position) <= 1f)
+        if(Vector3.Distance(agent.transform.position, target.transform.position) <= 0.5f)
         {
             this.completed = true;
             Debug.Log("true");
