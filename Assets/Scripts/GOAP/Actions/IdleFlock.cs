@@ -1,0 +1,22 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class IdleFlock : GAction
+{
+    public override bool PrePerform()
+    {
+        return true;
+    }
+
+    public override void Tick()
+    {
+
+    }
+
+    public override bool PostPerform()
+    {
+        return true;
+    }
+
+}
