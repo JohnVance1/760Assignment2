@@ -10,11 +10,39 @@ public class Anemone : MonoBehaviour
     [SerializeField]
     private List<GameObject> fish;
 
+    [SerializeField]
+    private GameObject foodPrefab;
+
+    private float timer = 0;
+    private float timerMax = 2f;
+    private bool startTimer = false;
+
+
     void Start()
     {
         GWorld.Instance.AddAnemone(gameObject);
         //foods = new List<GameObject>();
         fish = new List<GameObject>();
+    }
+
+    private void Update()
+    {
+        if(startTimer)
+        {
+            timer += Time.deltaTime;
+            if(timer >= timerMax)
+            {
+                GameObject food = Instantiate(foodPrefab,
+                                Random.insideUnitSphere / transform.localScale.x,
+                                Quaternion.identity,
+                                transform);
+
+                AddFood(food);
+                timer = 0;
+                startTimer = false;
+
+            }
+        }
     }
 
     public void AddFood(GameObject food)
@@ -28,6 +56,7 @@ public class Anemone : MonoBehaviour
         foods.RemoveAt(index);
         //foods.Sort();
         Destroy(temp);
+        startTimer = true;
     }
 
     public int FoodCount()
@@ -58,6 +87,15 @@ public class Anemone : MonoBehaviour
         if (other.CompareTag("Fish"))
         {
             AddFish(other.gameObject);
+
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Fish"))
+        {
+            RemoveFish(other.gameObject);
 
         }
     }

@@ -111,6 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foods: []
   fish: []
+  foodPrefab: {fileID: 3279665723736742895, guid: 9a031b9a0ef1ef74a95df9b9443a8247, type: 3}
 --- !u!54 &7373525380883477270
 Rigidbody:
   m_ObjectHideFlags: 0

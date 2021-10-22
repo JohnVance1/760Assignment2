@@ -60,7 +60,7 @@ public class FlockAgent : GAgent
     void Start()
     {
         base.Start();
-        SubGoal s1 = new SubGoal("HasBaby", 1, true);
+        SubGoal s1 = new SubGoal("HasBaby", 1, false);
         goals.Add(s1, 3);
 
         GWorld.Instance.GetWorld().ModifyState("SearchForAnemone", 1);
@@ -196,19 +196,5 @@ public class FlockAgent : GAgent
         return null;
 
     }
-
-
-
-    
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("SafeSpace"))
-        {
-            other.GetComponent<Anemone>().RemoveFish(gameObject);
-
-        }
-    }
-
 
 }
