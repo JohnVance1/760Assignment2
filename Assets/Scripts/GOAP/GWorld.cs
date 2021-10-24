@@ -31,7 +31,7 @@ public sealed class GWorld
 
         foreach(GameObject g in anemones)
         {
-            if ((g.GetComponent<Anemone>().FishCount() < 10) || agent.GetComponent<FlockAgent>().CurrentAnemone != g)
+            if ((g.GetComponent<Anemone>().FishCount() <= 10) && agent.GetComponent<FlockAgent>().CurrentAnemone != g)
             {
                 float localDist = Vector3.Distance(agent.transform.position, g.transform.position);
                 if (localDist < dist)

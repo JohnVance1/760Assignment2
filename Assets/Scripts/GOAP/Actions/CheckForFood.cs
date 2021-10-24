@@ -9,15 +9,28 @@ public class CheckForFood : GAction
     Anemone a;
     public override bool PrePerform()
     {
+        completed = false;
+
         flockAgent = agent.GetComponent<FlockAgent>();
         target = flockAgent.CurrentAnemone;
+        if(target == null)
+        {
+            return false;
+        }
+        
         a = flockAgent.CurrentAnemone.GetComponent<Anemone>();
         if (a.FoodCount() > 0 && flockAgent.InAnemone)
         {
             a.RemoveFood(a.FoodCount() - 1);
             flockAgent.IsHungry = false;
         }
+        else
+        {
+            //GWorld.Instance.GetWorld().ModifyState("NoFood", 1);
+            return false;
+        }
         rb = (target.transform.position - agent.transform.position).normalized;
+
         completed = true;
         return true;
     }

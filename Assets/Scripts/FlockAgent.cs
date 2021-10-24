@@ -57,6 +57,11 @@ public class FlockAgent : GAgent
     private GameObject currentAnemone;
     public GameObject CurrentAnemone { get { return currentAnemone; } set { currentAnemone = value; } }
 
+    private bool hadChild;
+    public bool HadChild { get { return hadChild; } set { hadChild = value; } }
+
+    private float hungryTimer;
+    private float hungryTimerMax;
 
     void Start()
     {
@@ -75,12 +80,32 @@ public class FlockAgent : GAgent
         velAdd = Vector3.zero;
         target = null;
         isHungry = true;
+        hungryTimer = 0;
+        hungryTimerMax = 10f;
 
     }
 
     void Update()
     {
         //UpdateState();
+        if(IsHungry == true)
+        {
+            hungryTimer += Time.deltaTime;
+            if(hungryTimer >= hungryTimerMax)
+            {
+                if (currentAnemone != null)
+                {
+                    currentAnemone.GetComponent<Anemone>().RemoveFish(gameObject);
+                }
+                agentFlock.RemoveAgent(this);
+                Destroy(gameObject);
+            }
+
+        }
+        else
+        {
+            hungryTimer = 0;
+        }
                 
     }
 
@@ -103,81 +128,7 @@ public class FlockAgent : GAgent
 
     }
 
-    public void UpdateState()
-    {
-        //dist = (player.transform.position - transform.position).magnitude;
-        
-        switch (flockMovement)
-        {
-            case FlockMovement.FLOCK:
-                if (dist <= 2f)
-                {
-                    flockMovement = FlockMovement.FLEE;
-
-                }     
-                if(target != null)
-                {
-                    flockMovement = FlockMovement.SEEK;
-                }
-                break;
-
-            case FlockMovement.FLEE:
-                if (dist > 2f)
-                {
-                    flockMovement = FlockMovement.FLOCK;
-
-                }                
-                break;
-
-            case FlockMovement.SEEK:
-                if(target == null)
-                {
-                    flockMovement = FlockMovement.FLOCK;
-                }
-                break;
-
-        }
-
-        DoState();
-
-    }
-
-
-    public void DoState()
-    {
-        switch (flockMovement)
-        {
-            case FlockMovement.FLOCK:
-                canMove = true;
-                velAdd = Vector3.zero;
-
-                break;
-
-            case FlockMovement.FLEE:
-                velAdd = (transform.position - target.transform.position).normalized;
-                velAdd *= 15f;
-                if (velAdd.sqrMagnitude > 35f)
-                {
-                    velAdd = velAdd.normalized * 5f;
-
-                }
-                break;
-
-            case FlockMovement.SEEK:
-                velAdd = (target.transform.position - transform.position).normalized;
-                velAdd *= 15f;
-                if (velAdd.sqrMagnitude > 35f)
-                {
-                    velAdd = velAdd.normalized * 5f;
-
-                }
-                velAdd = Vector3.zero;
-                break;
-            
-
-        }
-
-    }
+    
 
 
     public GameObject CheckForOtherAgent()

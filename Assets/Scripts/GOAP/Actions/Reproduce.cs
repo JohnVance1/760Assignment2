@@ -9,19 +9,23 @@ public class Reproduce : GAction
     private GameObject closest;
     public override bool PrePerform()
     {
+        completed = false;
+
         flockAgent = agent.GetComponent<FlockAgent>();
         target = flockAgent.CurrentAnemone;
-        
-        rb = (target.transform.position - agent.transform.position).normalized;
-
         closest = flockAgent.CheckForOtherAgent();
-        if(closest == null)
+
+        if (target == null || closest == null || flockAgent.HadChild == true || flockAgent.IsHungry == true)
         {
             return false;
         }
+        
+        rb = (target.transform.position - agent.transform.position).normalized;
 
+       
         flockAgent.IsHungry = true;
         closest.GetComponent<FlockAgent>().IsHungry = true;
+        flockAgent.HadChild = true;
 
         flockAgent.AgentFlock.AddAgent(flockAgent, flockAgent.AgentFlock);
         completed = true;

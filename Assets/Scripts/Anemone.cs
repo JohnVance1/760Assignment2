@@ -93,7 +93,8 @@ public class Anemone : MonoBehaviour
         if (other.CompareTag("Fish"))
         {
             AddFish(other.gameObject);
-
+            other.gameObject.GetComponent<FlockAgent>().CurrentAnemone = this.gameObject;
+            other.gameObject.GetComponent<FlockAgent>().InAnemone = true;
         }
     }
 
@@ -102,7 +103,8 @@ public class Anemone : MonoBehaviour
         if (other.CompareTag("Fish"))
         {
             RemoveFish(other.gameObject);
-
+            other.gameObject.GetComponent<FlockAgent>().CurrentAnemone = null;
+            other.gameObject.GetComponent<FlockAgent>().InAnemone = false;
         }
     }
 
