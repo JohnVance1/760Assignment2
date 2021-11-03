@@ -34,7 +34,7 @@ public class FlockAgent : GAgent
     private bool inBox;
     public bool InBox { get { return canMove; } set { canMove = value; } }
 
-
+    [SerializeField]
     private GameObject target;
 
     public GameObject Target { get { return target; } set { target = value; } }
@@ -47,16 +47,19 @@ public class FlockAgent : GAgent
 
     Vector3 newPos;
 
+    [SerializeField]
     private bool inAnemone;
     public bool InAnemone { get { return inAnemone; } set { inAnemone = value; } }
 
-
+    [SerializeField]
     private bool isHungry;
     public bool IsHungry { get { return isHungry; } set { isHungry = value; } }
 
+    [SerializeField]
     private GameObject currentAnemone;
     public GameObject CurrentAnemone { get { return currentAnemone; } set { currentAnemone = value; } }
 
+    [SerializeField]
     private bool hadChild;
     public bool HadChild { get { return hadChild; } set { hadChild = value; } }
 
@@ -81,7 +84,7 @@ public class FlockAgent : GAgent
         target = null;
         isHungry = true;
         hungryTimer = 0;
-        hungryTimerMax = 10f;
+        hungryTimerMax = UnityEngine.Random.Range(4f, 7f);
 
     }
 
@@ -133,7 +136,7 @@ public class FlockAgent : GAgent
 
     public GameObject CheckForOtherAgent()
     {
-        Collider[] agentList = Physics.OverlapSphere(transform.position, 1f);
+        Collider[] agentList = Physics.OverlapSphere(transform.position, 2f);
         foreach (Collider c in agentList)
         {
             if (c.gameObject.tag != "SafeSpace" && c.gameObject.tag != "Food")

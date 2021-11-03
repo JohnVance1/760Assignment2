@@ -59,9 +59,11 @@ public class Flock : MonoBehaviour
 
     public bool insidePen;
 
+    private int agentsInAnenome;
+
     void Start()
     {
-
+        agentsInAnenome = 0;
         squareMaxSpeed = maxSpeed * maxSpeed;
         squareNeighborRadius = neighborRadius * neighborRadius;
         squareAvoidanceRadius = squareNeighborRadius * avoidanceRadiusMultiplier * avoidanceRadiusMultiplier;
@@ -95,11 +97,15 @@ public class Flock : MonoBehaviour
     void Update()
     {
         Flocking();
-
+        
     }
 
-
-    List<Transform> GetNearbyObjects(FlockAgent agent)
+    /// <summary>
+    /// Gets all of the nearby objects from an agent
+    /// </summary>
+    /// <param name="agent"></param>
+    /// <returns></returns>
+    public List<Transform> GetNearbyObjects(FlockAgent agent)
     {
         List<Transform> context = new List<Transform>();
         Collider[] contextColliders = Physics.OverlapSphere(agent.transform.position, neighborRadius);
@@ -120,12 +126,20 @@ public class Flock : MonoBehaviour
 
     #region Behaviors
     
-
+    /// <summary>
+    /// Removes an agent from the flock
+    /// </summary>
+    /// <param name="agent"></param>
     public void RemoveAgent(FlockAgent agent)
     {
         agents.Remove(agent);
     }
 
+    /// <summary>
+    /// Adds and creates an agent to the flock
+    /// </summary>
+    /// <param name="agent"></param>
+    /// <param name="flock"></param>
     public void AddAgent(FlockAgent agent, Flock flock)
     {
         FlockAgent newAgent = Instantiate(
@@ -142,8 +156,9 @@ public class Flock : MonoBehaviour
 
     }
 
-
-
+    /// <summary>
+    /// Gets all of the behhaviors and gets the vector to move them
+    /// </summary>
     public void Flocking()
     {
         foreach (FlockAgent agent in agents)
@@ -167,13 +182,17 @@ public class Flock : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Makes the boids stay within the bounds of the two cubes
+    /// </summary>
+    /// <param name="agent"></param>
+    /// <returns></returns>
     public Vector3 StayInBounds(FlockAgent agent)
     {
         agentPos = agent.transform.position;
 
         if (agentPos.x <= bound1Vec.x)
         {
-            //agent.transform.position = new Vector3(-agent.transform.position.x, agent.transform.position.y, 0);
             agent.transform.position = new Vector3(agent.transform.position.x + .1f, agent.transform.position.y, agent.transform.position.z);
 
             return new Vector3(-1, 0, 0);
@@ -182,7 +201,6 @@ public class Flock : MonoBehaviour
 
         else if (agentPos.x >= bound2Vec.x)
         {
-            //agent.transform.position = new Vector3(-agent.transform.position.x, agent.transform.position.y, 0);
             agent.transform.position = new Vector3(agent.transform.position.x - .1f, agent.transform.position.y, agent.transform.position.z);
 
             return new Vector3(-1, 0, 0);
@@ -191,7 +209,6 @@ public class Flock : MonoBehaviour
 
         else if(agentPos.y <= bound1Vec.y)
         {
-            //agent.transform.position = new Vector3(agent.transform.position.x, -agent.transform.position.y, 0);
             agent.transform.position = new Vector3(agent.transform.position.x, agent.transform.position.y + .1f, agent.transform.position.z);
 
             return new Vector3(0, -1, 0);
@@ -200,7 +217,6 @@ public class Flock : MonoBehaviour
 
         else if(agentPos.y >= bound2Vec.y)
         {
-            //agent.transform.position = new Vector3(agent.transform.position.x, -agent.transform.position.y, 0);
             agent.transform.position = new Vector3(agent.transform.position.x, agent.transform.position.y - .1f, agent.transform.position.z);
 
             return new Vector3(0, -1, 0);
@@ -209,7 +225,6 @@ public class Flock : MonoBehaviour
 
         else if (agentPos.z <= bound1Vec.z)
         {
-            //agent.transform.position = new Vector3(-agent.transform.position.x, agent.transform.position.y, 0);
             agent.transform.position = new Vector3(agent.transform.position.x, agent.transform.position.y, agent.transform.position.z + .1f);
 
             return new Vector3(0, 0, -1);
@@ -218,7 +233,6 @@ public class Flock : MonoBehaviour
 
         else if (agentPos.z >= bound2Vec.z)
         {
-            //agent.transform.position = new Vector3(-agent.transform.position.x, agent.transform.position.y, 0);
             agent.transform.position = new Vector3(agent.transform.position.x, agent.transform.position.y, agent.transform.position.z - .1f);
 
             return new Vector3(0, 0, -1);
@@ -230,58 +244,8 @@ public class Flock : MonoBehaviour
             return new Vector3(1, 1, 1);
 
         }
-        //return new Vector3(1, 1);
 
-    }
-
-    public Vector3 StayInPen(FlockAgent agent)
-    {
-        agentPos = agent.transform.position;
-
-        if (agentPos.x <= camLeft)
-        {
-            //agent.transform.position = new Vector3(-agent.transform.position.x, agent.transform.position.y, 0);
-            agent.transform.position = new Vector3(agent.transform.position.x + .1f, agent.transform.position.y, 0);
-
-            return new Vector3(-1, 0, 0);
-
-        }
-
-        else if (agentPos.x >= camRight)
-        {
-            //agent.transform.position = new Vector3(-agent.transform.position.x, agent.transform.position.y, 0);
-            agent.transform.position = new Vector3(agent.transform.position.x - .1f, agent.transform.position.y, 0);
-
-            return new Vector3(-1, 0, 0);
-
-        }
-
-        else if (agentPos.y >= camTop)
-        {
-            //agent.transform.position = new Vector3(agent.transform.position.x, -agent.transform.position.y, 0);
-            agent.transform.position = new Vector3(agent.transform.position.x, agent.transform.position.y - .1f, 0);
-
-            return new Vector3(0, -1);
-
-        }
-
-        else if (agentPos.y <= 5.5f)
-        {
-            //agent.transform.position = new Vector3(agent.transform.position.x, -agent.transform.position.y, 0);
-            agent.transform.position = new Vector3(agent.transform.position.x, agent.transform.position.y + .1f, 0);
-
-            return new Vector3(0, -1, 0);
-
-        }
-
-        else
-        {
-            return new Vector3(1, 1, 1);
-
-        }
-        //return new Vector3(1, 1);
-
-    }
+    }   
 
     
     #endregion

@@ -120,6 +120,7 @@ public class GAgent : MonoBehaviour
     void CompleteAction()
     {
         currentAction.running = false;
+        currentAction.completed = false;
         currentAction.PostPerform();
         time = 0;
         invoked = false;

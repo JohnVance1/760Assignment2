@@ -30,7 +30,6 @@ public abstract class GAction : MonoBehaviour
 
     public void Awake()
     {
-        //agent = gameObject.GetComponent<NavMeshAgent>();
         agent = gameObject;
 
         if(preConditions != null)
@@ -50,7 +49,7 @@ public abstract class GAction : MonoBehaviour
         }
     }
 
-    public void Update()
+    public void LateUpdate()
     {
         if (running)
         {
@@ -77,13 +76,19 @@ public abstract class GAction : MonoBehaviour
         return velAdd;
     }
     
+    /// <summary>
+    /// Allows for the player to seek something
+    /// </summary>
+    /// <param name="fish"></param>
+    /// <param name="target"></param>
+    /// <returns></returns>
     public Vector3 Seek(Vector3 fish, Vector3 target)
     {
         Vector3 velAdd = (target - fish).normalized;
         velAdd *= 15f;
         if (velAdd.sqrMagnitude > 35f)
         {
-            velAdd = velAdd.normalized * 5f;
+            velAdd = velAdd.normalized * 7f;
 
         }
 

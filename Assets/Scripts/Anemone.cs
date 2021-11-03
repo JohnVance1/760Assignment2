@@ -14,7 +14,7 @@ public class Anemone : MonoBehaviour
     private GameObject foodPrefab;
 
     private float timer = 0;
-    private float timerMax = 2f;
+    private float timerMax = 1f;
     private bool startTimer = false;
 
 
@@ -39,14 +39,17 @@ public class Anemone : MonoBehaviour
             if(timer >= timerMax)
             {
                 GameObject food = Instantiate(foodPrefab,
-                                new Vector3(Random.Range(0f, 0.5f) + transform.position.x, Random.Range(0f, 0.5f) + transform.position.y, Random.Range(0f, 0.5f) + transform.position.z),
+                                new Vector3(Random.Range(-0.5f, 0.5f) + transform.position.x, Random.Range(-0.5f, 0.5f) + transform.position.y, Random.Range(-0.5f, 0.5f) + transform.position.z),
                                 Quaternion.identity,
                                 transform);
 
                 AddFood(food);
                 timer = 0;
-                startTimer = false;
 
+                if (foods.Count > 10)
+                {
+                    startTimer = false;
+                }
             }
         }
     }
@@ -88,24 +91,24 @@ public class Anemone : MonoBehaviour
         return fish.Count;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Fish"))
-        {
-            AddFish(other.gameObject);
-            other.gameObject.GetComponent<FlockAgent>().CurrentAnemone = this.gameObject;
-            other.gameObject.GetComponent<FlockAgent>().InAnemone = true;
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.CompareTag("Fish"))
+    //    {
+    //        AddFish(other.gameObject);
+    //        other.gameObject.GetComponent<FlockAgent>().CurrentAnemone = this.gameObject;
+    //        other.gameObject.GetComponent<FlockAgent>().InAnemone = true;
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Fish"))
-        {
-            RemoveFish(other.gameObject);
-            other.gameObject.GetComponent<FlockAgent>().CurrentAnemone = null;
-            other.gameObject.GetComponent<FlockAgent>().InAnemone = false;
-        }
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.CompareTag("Fish"))
+    //    {
+    //        RemoveFish(other.gameObject);
+    //        other.gameObject.GetComponent<FlockAgent>().CurrentAnemone = null;
+    //        other.gameObject.GetComponent<FlockAgent>().InAnemone = false;
+    //    }
+    //}
 
 }

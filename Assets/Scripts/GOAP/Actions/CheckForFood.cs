@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The action for checking if there is food in the 
+/// anemone the agent is currently in
+/// </summary>
 public class CheckForFood : GAction
 {
     FlockAgent flockAgent;
@@ -19,37 +23,41 @@ public class CheckForFood : GAction
         }
         
         a = flockAgent.CurrentAnemone.GetComponent<Anemone>();
-        if (a.FoodCount() > 0 && flockAgent.InAnemone)
-        {
-            a.RemoveFood(a.FoodCount() - 1);
-            flockAgent.IsHungry = false;
-        }
-        else
-        {
-            //GWorld.Instance.GetWorld().ModifyState("NoFood", 1);
-            return false;
-        }
-        rb = (target.transform.position - agent.transform.position).normalized;
 
-        completed = true;
+               
+
         return true;
     }
 
     public override void Tick()
     {
-        flockAgent.VelAdd = Seek(agent.transform.position, target.transform.position + rb);
-        if (Vector3.Distance(agent.transform.position, target.transform.position + rb) <= 0.5f)
+        // Checks to see if there is food in the current anemone,
+        // if it is in an anemone,
+        // if it is hungry, and
+        // if it hasen't had a child
+        if (a.FoodCount() > 0 && 
+            flockAgent.InAnemone && 
+            flockAgent.IsHungry == true && 
+            flockAgent.HadChild == false)
         {
-            rb *= -1;
+            // Remove a food from the anemone
+            a.RemoveFood(a.FoodCount() - 1);
+            // The fish isn't hungry
+            flockAgent.IsHungry = false;
+        }
+
+        flockAgent.VelAdd = Seek(agent.transform.position, target.transform.position);
+        
+        if(flockAgent.IsHungry == false)
+        {
+            completed = true;
+
         }
 
     }
 
     public override bool PostPerform()
     {
-
-        //flockAgent.IsHungry = false;
-
         return true;
     }
 
